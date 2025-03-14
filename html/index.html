@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delgun & Deletion Menu UI</title>
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
+      --accent-color: #e74c3c; /* red */
+      --light-accent: #c0392b;
+      --text-color: #ecf0f1;
+      --border-color: rgba(236,240,241,0.4);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Roboto Mono', monospace;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+    #indicator {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      background: var(--accent-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #indicator.active {
+      opacity: 1;
+      transform: translateX(-50%) scale(1.05);
+    }
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #delmenu {
+      background: var(--accent-color);  /* red */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      max-width: 700px;
+      width: 90%;
+      color: var(--text-color);
+      animation: fadeInUp 0.5s ease;
+      border: 2px solid var(--border-color);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #delmenu h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    .locations {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    .location {
+      flex: 1;
+      margin: 10px;
+      text-align: center;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 10px;
+      transition: transform 0.3s ease;
+    }
+    .location h3 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+    .location img {
+      width: 180px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      border: 2px solid var(--border-color);
+    }
+    .buttons {
+      margin-top: 5px;
+    }
+    .buttons button {
+      margin: 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      background: var(--accent-color);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      font-size: 0.9rem;
+    }
+    .buttons button:hover {
+      background: var(--light-accent);
+      transform: translateY(-2px);
+    }
+    .clear-all {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .clear-all button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: var(--light-accent);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      font-size: 1rem;
+    }
+    .clear-all button:hover {
+      background: #a93226;
+      transform: translateY(-2px);
+    }
+    .close-menu {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .close-menu button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      background: var(--secondary-color);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      font-size: 0.9rem;
+    }
+    .close-menu button:hover {
+      background: #2c3e50;
+      transform: translateY(-2px);
+    }
+    .pause-options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .pause-options label {
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+    .pause-options input {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="indicator">DELGUN MODE ACTIVE</div>
+  
+  <div class="menu-overlay" id="menuOverlay">
+    <div id="delmenu">
+      <h2>Deletion Menu</h2>
+      <div class="locations">
+        <div class="location" data-location="sandy">
+          <h3>Sandy Shores</h3>
+          <img src="img/sandy.png" alt="Sandy Shores" />
+          <div class="buttons">
+            <button data-action="clearCars" data-location="sandy">Clear Cars</button>
+            <button data-action="clearPeds" data-location="sandy">Clear Peds</button>
+          </div>
+        </div>
+        <div class="location" data-location="paleto">
+          <h3>Paleto Bay</h3>
+          <img src="img/paleto.png" alt="Paleto Bay" />
+          <div class="buttons">
+            <button data-action="clearCars" data-location="paleto">Clear Cars</button>
+            <button data-action="clearPeds" data-location="paleto">Clear Peds</button>
+          </div>
+        </div>
+        <div class="location" data-location="losantos">
+          <h3>Los Santos</h3>
+          <img src="img/losantos.png" alt="Los Santos" />
+          <div class="buttons">
+            <button data-action="clearCars" data-location="losantos">Clear Cars</button>
+            <button data-action="clearPeds" data-location="losantos">Clear Peds</button>
+          </div>
+        </div>
+      </div>
+      <div class="clear-all">
+        <button data-action="clearEverything" data-location="all">Clear Everything</button>
+      </div>
+      <div class="pause-options">
+        <label><input type="checkbox" id="pauseCars" onchange="updatePauseSettings()">Pause Cars</label>
+        <label><input type="checkbox" id="pausePeds" onchange="updatePauseSettings()">Pause Peds</label>
+      </div>
+      <div class="close-menu">
+        <button id="closeMenu">Close Menu</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function updatePauseSettings() {
+      const pauseCars = document.getElementById("pauseCars").checked;
+      const pausePeds = document.getElementById("pausePeds").checked;
+      fetch(`https://${GetParentResourceName()}/menuAction`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({
+          action: "updatePause",
+          pauseCars: pauseCars,
+          pausePeds: pausePeds
+        })
+      });
+    }
+    
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'toggle') {
+        const indicator = document.getElementById('indicator');
+        if (event.data.status) {
+          indicator.classList.add('active');
+        } else {
+          indicator.classList.remove('active');
+        }
+      } else if (event.data.type === "menuToggle") {
+        const overlay = document.getElementById('menuOverlay');
+        if (event.data.status) {
+          overlay.style.display = "flex";
+        } else {
+          overlay.style.display = "none";
+        }
+      }
+    });
+    
+    document.querySelectorAll('button[data-action]').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const action = button.getAttribute('data-action');
+        const location = button.getAttribute('data-location');
+        const payload = { action: action, location: location };
+        if (["clearCars", "clearPeds", "clearEverything"].includes(action)) {
+          payload.pauseCars = document.getElementById("pauseCars").checked;
+          payload.pausePeds = document.getElementById("pausePeds").checked;
+        }
+        fetch(`https://${GetParentResourceName()}/menuAction`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: JSON.stringify(payload)
+        });
+      });
+    });
+    
+    document.getElementById('closeMenu').addEventListener('click', function() {
+      fetch(`https://${GetParentResourceName()}/menuAction`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({ action: "closeMenu" })
+      });
+    });
+    
+    VanillaTilt.init(document.querySelectorAll(".location"), {
+      max: 3,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.1,
+    });
+  </script>
+</body>
+</html>
